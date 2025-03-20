@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Dashboard</h1>
+        <p class="text-gray-600 mb-2">This is dashboard page</p>
+        <p class="text-gray-500 text-sm mb-8">file: dashboard/index.html</p>
+
+        <div id="actions-list" class="bg-white rounded-lg shadow-md p-6 mb-6"></div>
+        
+        <button onclick="clearActions()" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg mb-6">
+            Clear All Actions
+        </button>
+        
+        <div class="flex flex-col space-y-4">
+            <a href="/product" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg text-center w-32">
+                Product
+            </a>
+            <a href="/cart" class="inline-block bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg text-center w-32">
+                Cart
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function displayActions() {
+            const actions = JSON.parse(localStorage.getItem('actions') || '[]');
+            const actionsDiv = document.getElementById('actions-list');
+            
+            if (actions.length === 0) {
+                actionsDiv.innerHTML = '<p class="text-gray-500 italic">No actions logged yet</p>';
+                return;
+            }
+
+            let actionsHtml = '<h2 class="text-2xl font-semibold text-gray-800 mb-4">Action History</h2>';
+            actions.reverse().forEach(action => {
+                actionsHtml += `
+                    <div class="action-item bg-gray-50 rounded-lg p-4 mb-4">
+                        <p class="text-sm text-gray-600 mb-2"><strong>Time:</strong> ${new Date(action.timestamp).toLocaleString()}</p>
+                        <p class="text-gray-800 mb-2"><strong>Action:</strong> ${action.action}</p>
+                        <p class="font-mono text-sm text-gray-700"><strong>Details:</strong> ${JSON.stringify(action.details, null, 2)}</p>
+                    </div>
+                `;
+            });
+
+            actionsDiv.innerHTML = actionsHtml;
+        }
+
+        function clearActions() {
+            localStorage.setItem('actions', '[]');
+            displayActions();
+        }
+
+        // Display actions when page loads
+        displayActions();
+
+        // Log page visit
+        const actions = JSON.parse(localStorage.getItem('actions') || '[]');
+        // actions.push({
+        //     timestamp: new Date().toISOString(),
+        //     action: 'page_visit',
+        //     details: {
+        //         page: 'dashboard'
+        //     }
+        // });
+        localStorage.setItem('actions', JSON.stringify(actions));
+
+        // Log navigation actions
+        // document.querySelectorAll('a').forEach(link => {
+        //     link.addEventListener('click', (e) => {
+        //         const actions = JSON.parse(localStorage.getItem('actions') || '[]');
+        //         actions.push({
+        //             timestamp: new Date().toISOString(),
+        //             action: 'navigation',
+        //             details: {
+        //                 from: 'dashboard',
+        //                 to: link.getAttribute('href')
+        //             }
+        //         });
+        //         localStorage.setItem('actions', JSON.stringify(actions));
+        //     });
+        // });
+    </script>
+</body>
+</html>
