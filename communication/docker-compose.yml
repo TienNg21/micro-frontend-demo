@@ -9,6 +9,6 @@ services:
       - ./product:/etc/nginx/html/product
       - ./cart:/etc/nginx/html/cart
     ports:
-      - "80:80"
+      - "8080:80"
     command: >
       /bin/sh -c "chown -R nginx:nginx /etc/nginx/html && chmod -R 755 /etc/nginx/html && nginx -g 'daemon off;'"
